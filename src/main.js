@@ -1,4 +1,7 @@
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue';
+import Home      from './pages/Home.vue';
+import { store } from '@/store';
 
-createApp(App).mount("#app");
+createApp(Home)
+    .use(store)
+    .mount('#app');
