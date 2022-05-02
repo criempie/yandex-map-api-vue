@@ -1,16 +1,43 @@
 <template>
   <div class="page">
-    <Map />
+    <Side/>
+    <Map/>
   </div>
 </template>
 
 <script>
-import Map from '@/components/Map'
+import Map  from '@/components/Map';
+import Side from '@/components/Side';
+import {
+  mapActions,
+  mapGetters,
+}           from 'vuex';
 
 export default {
   components: {
-    Map
-  }
+    Map, Side,
+  },
+  created() {
+    this.initOffices();
+    this.initMap();
+  },
+  watch   : {
+    currentCountry() {
+      this.updateOffices();
+    },
+  },
+  computed: {
+    ...mapGetters({
+      currentCountry: 'currentCountry',
+    }),
+  },
+  methods : {
+    ...mapActions({
+      initMap      : 'map/init',
+      initOffices  : 'offices/init',
+      updateOffices: 'offices/updateOffices',
+    }),
+  },
 };
 </script>
 
@@ -24,5 +51,7 @@ export default {
 .page {
   height: 100vh;
   width: 100vw;
+  display: flex;
+  float: left;
 }
 </style>
