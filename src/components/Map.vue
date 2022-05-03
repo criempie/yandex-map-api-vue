@@ -33,6 +33,6 @@ export default {
 <style>
 .map {
   height: 100%;
-  width: 70%;
+  width: 100%;
 }
 </style>

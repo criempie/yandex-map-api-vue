@@ -1,16 +1,23 @@
 <template>
   <div class="side">
     <Tabs @selectedTab="setCountry" :tabs="tabs"/>
+    <CardHolder v-for="offByCity of groupedOffices"
+                :officesByCity="offByCity"/>
   </div>
 </template>
 
 <script>
-import Tabs           from '@/components/Tabs';
+import Card       from '@/components/Card';
+import CardHolder from '@/components/CardHolder';
+import Tabs       from '@/components/Tabs';
 import {
   RUSSIA,
   BELARUS,
-}                     from '@/store';
-import { mapActions } from 'vuex';
+}                 from '@/store';
+import {
+  mapActions,
+  mapGetters,
+}                 from 'vuex';
 
 const tabs = [
   {
@@ -25,12 +32,17 @@ const tabs = [
 
 export default {
   components: {
-    Tabs,
+    Tabs, Card, CardHolder,
   },
-  methods: {
+  methods   : {
     ...mapActions({
       setCountry: 'country',
-    })
+    }),
+  },
+  computed  : {
+    ...mapGetters({
+      groupedOffices: 'offices/groupByCity',
+    }),
   },
   data() {
     return { tabs };
@@ -41,7 +53,7 @@ export default {
 <style scoped>
 .side {
   width: 30%;
-  min-width: 250px;
+  min-width: 270px;
   max-width: 400px;
   z-index: 2;
 

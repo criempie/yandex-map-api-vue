@@ -54,4 +54,10 @@ export default {
   display: flex;
   float: left;
 }
+
+.icon {
+  width: 16px;
+  height: 16px;
+  stroke: black;
+}
 </style>

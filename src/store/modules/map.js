@@ -50,8 +50,7 @@ export default {
             }
         },
 
-        createPointsCollection({ state, rootGetters }) {
-            console.log(state.ready);
+        createPointsCollection({ rootGetters }) {
             const collection = new ymaps.GeoObjectCollection();
             rootGetters.coords.forEach(coord => {
                 const placemark = new ymaps.Placemark(coord);

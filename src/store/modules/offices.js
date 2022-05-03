@@ -32,6 +32,25 @@ export default {
         offices(state) {
             return state.offices;
         },
+
+        groupByCity(state) {
+            const grouped = {};
+            const result = [];
+
+            state.offices.forEach(off => {
+                if (grouped[off.city]) {
+                    grouped[off.city].push(off);
+                } else {
+                    grouped[off.city] = [ off ];
+                }
+            });
+
+            for (let k in grouped) {
+                result.push({city: k, offices: grouped[k]})
+            }
+
+            return result;
+        },
     },
     namespaced: true,
 };
