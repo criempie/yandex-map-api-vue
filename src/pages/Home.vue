@@ -35,6 +35,7 @@ export default {
     ...mapActions({
       initMap      : 'map/init',
       initOffices  : 'offices/init',
+      initBalloon  : 'balloon/init',
       updateOffices: 'offices/updateOffices',
     }),
   },

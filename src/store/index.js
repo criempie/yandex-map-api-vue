@@ -1,3 +1,4 @@
+import balloon from './modules/balloon';
 import Vuex    from 'vuex';
 import map     from './modules/map';
 import offices from './modules/offices';
@@ -29,6 +30,6 @@ export const store = new Vuex.Store({
         },
     },
     modules  : {
-        map, offices,
+        map, offices, balloon,
     },
 });

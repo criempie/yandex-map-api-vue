@@ -34,4 +34,41 @@
     font-family: Comfortaa, Calibri, serif;
     font-weight: 400;
     font-size: 16px;
+
+    --primary-color: #FF9E00;
+    --secondary-color: #32466B;
+    --email-color: #47BAEA;
+}
+
+/*ymaps*/
+
+.ymaps-2-1-79-balloon__layout,
+.ymaps-2-1-79-balloon__content,
+.ymaps-2-1-79-balloon__tail:after {
+    background: var(--secondary-color) !important;
+}
+
+.ymaps-2-1-79-balloon__close-button {
+    background: url("./icons/cross.svg") no-repeat center !important;
+    background-size: 12px 12px !important;
+}
+
+.balloon__header {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.balloon__body {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.balloon_phoneNumbers {
+    display: flex;
+    gap: .5em;
+}
+
+.balloon__email {
+    color: var(--email-color);
 }

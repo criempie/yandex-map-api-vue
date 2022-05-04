@@ -1,0 +1,10 @@
+<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <line y1="2" x1="2"
+              y2="14" x2="14"
+              stroke-linecap="round" id="svg_1" stroke-width="3" stroke="#fff"/>
+        <line y1="2" x1="2"
+              y2="14" x2="14"
+              stroke="#fff" transform="rotate(90, 8, 8) " stroke-linecap="round" id="svg_2" stroke-width="3"/>
+    </g>
+</svg>

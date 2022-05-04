@@ -1,7 +1,7 @@
 import {
     RUSSIA,
     BELARUS,
-} from '@/store';
+}           from '@/store';
 
 export default {
     state     : {
@@ -46,10 +46,27 @@ export default {
             });
 
             for (let k in grouped) {
-                result.push({city: k, offices: grouped[k]})
+                result.push({ city: k, offices: grouped[k] });
             }
 
             return result;
+        },
+
+        formattedToHTML: () => (office) => {
+            const phoneNumber = (number) => `<span>${number}</span>`;
+            let numbers = ``;
+            office.phoneNumbers.forEach(n => numbers += phoneNumber(n))
+
+            return `
+                <header class="balloon__header">
+                            ОФИС ${office.name}
+                </header>
+                <main class="balloon__body">
+                    <span>${office.owner}</span>
+                    <span class="balloon_phoneNumbers">${numbers}</span>    
+                    <span class="balloon__email">${office.email}</span>            
+                </main>     
+            `
         },
     },
     namespaced: true,

@@ -30,7 +30,7 @@ export default {
 }
 
 .name {
-  color: #32466B;
+  color: var(--secondary-color);
   font-weight: 600;
 }
 
@@ -39,7 +39,7 @@ export default {
 }
 
 .email {
-  color: #47BAEA;
+  color: var(--email-color);
 }
 
 .phoneNumbers {

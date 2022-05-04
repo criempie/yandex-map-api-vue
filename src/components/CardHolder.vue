@@ -69,7 +69,7 @@ export default {
 }
 
 .name {
-  color: #FF9E00;
+  color: var(--primary-color);
   font-weight: 600;
   font-size: 18px;
   line-height: 3;

@@ -40,6 +40,7 @@ export default {
                 commit('map', newMap);
                 commit('ready');
                 dispatch('updateMap');
+                dispatch('balloon/init', null, { root: true });
             });
         },
 
@@ -50,10 +51,19 @@ export default {
             }
         },
 
-        createPointsCollection({ rootGetters }) {
+        createPointsCollection({ dispatch, rootGetters }) {
             const collection = new ymaps.GeoObjectCollection();
-            rootGetters.coords.forEach(coord => {
-                const placemark = new ymaps.Placemark(coord);
+            rootGetters['offices/offices'].forEach(off => {
+                const placemark = new ymaps.Placemark(off.coords, {
+                    balloonContent: rootGetters['offices/formattedToHTML'](off),
+                }, {
+                    openBalloonOnClick   : true,
+                    balloonCloseButton   : false,
+                    hideIconOnBalloonOpen: false,
+                });
+
+                placemark.events.add('click', () => dispatch('setCenter', { coords: off.coords }));
+
                 collection.add(placemark);
             });
 
@@ -68,10 +78,14 @@ export default {
             commit('pointsCollection', pointsCollection);
 
             getters.map
-                 .geoObjects
-                 .splice(0, 1, getters.pointsCollection);
+                   .geoObjects
+                   .splice(0, 1, getters.pointsCollection);
 
             dispatch('setIncludingAllBounds');
+        },
+
+        setCenter({ getters }, { coords, zoom = 12 }) {
+            getters.map.setCenter(coords, zoom);
         },
     },
     getters   : {
@@ -81,7 +95,11 @@ export default {
 
         map(state) {
             return state.map();
-        }
+        },
+
+        ready(state) {
+            return state.ready;
+        },
     },
     namespaced: true,
 };
