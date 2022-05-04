@@ -1,23 +1,43 @@
 <template>
   <div class="card">
-    <h2 class="name">Офис {{ name }}</h2>
-    <span class="row">{{ owner }}</span>
+    <h2 class="name">
+      Офис {{ office.name }}
+      <img src="@/assets/map.svg"
+           alt="map"
+           class="icon icon_24 clickable" @click="showOnMap"/>
+    </h2>
+    <span class="row">{{ office.owner }}</span>
     <div class="phoneNumbers">
-      <span v-for="number of phoneNumbers" class="number">
+      <span v-for="number of office.phoneNumbers" class="number">
         {{ number }}
       </span>
     </div>
-    <span class="email">{{ email }}</span>
+    <span class="email">{{ office.email }}</span>
   </div>
 </template>
 
 <script>
+import {
+  mapActions,
+} from 'vuex';
+
 export default {
-  props: {
-    name        : String,
-    owner       : String,
-    phoneNumbers: Array,
-    email       : String,
+  props  : {
+    office: Object,
+  },
+  methods: {
+    ...mapActions({
+      balloonOpen: 'balloon/open',
+      setCenter  : 'map/setCenter',
+    }),
+
+    showOnMap() {
+      this.balloonOpen({
+        data  : this.$store.getters['offices/formattedToHTML'](this.office),
+        coords: this.office.coords,
+      })
+          .then(() => this.setCenter({ coords: this.office.coords }));
+    },
   },
 };
 </script>
@@ -32,6 +52,9 @@ export default {
 .name {
   color: var(--secondary-color);
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .row {

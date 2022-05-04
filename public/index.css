@@ -40,6 +40,10 @@
     --email-color: #47BAEA;
 }
 
+.clickable:hover {
+    cursor: pointer;
+}
+
 /*ymaps*/
 
 .ymaps-2-1-79-balloon__layout,

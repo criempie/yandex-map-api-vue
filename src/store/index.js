@@ -18,6 +18,7 @@ export const store = new Vuex.Store({
     actions  : {
         country({ commit, dispatch }, country) {
             commit('country', country);
+            dispatch('balloon/close');
         },
     },
     getters  : {

@@ -61,4 +61,9 @@ export default {
   height: 16px;
   stroke: black;
 }
+
+.icon_24 {
+  width: 24px;
+  height: 24px;
+}
 </style>

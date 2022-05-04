@@ -40,7 +40,6 @@ export default {
                 commit('map', newMap);
                 commit('ready');
                 dispatch('updateMap');
-                dispatch('balloon/init', null, { root: true });
             });
         },
 
@@ -58,11 +57,12 @@ export default {
                     balloonContent: rootGetters['offices/formattedToHTML'](off),
                 }, {
                     openBalloonOnClick   : true,
-                    balloonCloseButton   : false,
                     hideIconOnBalloonOpen: false,
                 });
 
-                placemark.events.add('click', () => dispatch('setCenter', { coords: off.coords }));
+                placemark.events.add('click', () => {
+                    dispatch('setCenter', { coords: off.coords });
+                });
 
                 collection.add(placemark);
             });

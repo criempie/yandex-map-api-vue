@@ -8,11 +8,7 @@
           :class="isOpen ? '' : 'closed'"
           ref="cardHolder"
           :style="{maxHeight: isOpen ? height + 'px' : 0}">
-      <Card v-for="off of officesByCity.offices"
-            :name="off.name"
-            :owner="off.owner"
-            :phone-numbers="off.phoneNumbers"
-            :email="off.email"/>
+      <Card v-for="off of officesByCity.offices" :office="off"/>
     </main>
   </div>
 </template>

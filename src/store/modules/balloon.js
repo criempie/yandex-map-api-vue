@@ -1,30 +1,15 @@
 export default {
-    state     : {
-        balloon: undefined,
-    },
-    mutations : {
-        balloon(state, balloon) {
-            state.balloon = balloon;
-        },
-    },
+    state     : {},
+    mutations : {},
     actions   : {
-        init({ rootGetters }) {
-            if (rootGetters['map/ready']) {
-                const map = rootGetters['map/map'];
-                const balloon = new ymaps.Balloon(map);
-                balloon.options.setParent(map.options);
-            }
+        open({ getters, rootGetters }, { data, coords }) {
+            return rootGetters['map/map'].balloon.open(coords, data);
         },
 
-        open({ state }, data, coords) {
-            state.balloon.setData(data);
-            state.balloon.open(coords);
+        close({ rootGetters }) {
+            return rootGetters['map/map'].balloon.close();
         },
     },
-    getters   : {
-        balloon(state) {
-            return state.balloon;
-        },
-    },
+    getters   : {},
     namespaced: true,
 };
