@@ -76,3 +76,35 @@
 .balloon__email {
     color: var(--email-color);
 }
+
+/*layouts*/
+
+.layout {
+    background: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.layout_circle {
+    border-radius: 100px;
+}
+
+/*claster layout*/
+
+.claster {
+    width: 32px;
+    height: 32px;
+}
+
+.claster__number {
+    color: white;
+    font-weight: 600;
+}
+
+/*placemark layout*/
+
+.placemark {
+    width: 24px;
+    height: 24px;
+}

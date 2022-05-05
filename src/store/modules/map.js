@@ -1,8 +1,8 @@
 export default {
     state     : {
-        ready           : false,
-        map             : undefined,
-        pointsClusterer : undefined,
+        ready          : false,
+        map            : undefined,
+        pointsClusterer: undefined,
     },
     mutations : {
         ready(state) {
@@ -39,8 +39,21 @@ export default {
 
                 commit('map', newMap);
                 commit('ready');
-                dispatch('updateMap');
+                dispatch('initCustomLayouts')
+                    .then(() => dispatch('updateMap'));
+
             });
+        },
+
+        async initCustomLayouts() {
+
+            const clusterLayoutData = (await import('@/layouts/cluster.js')).default;
+            const clusterLayout = ymaps.templateLayoutFactory.createClass(clusterLayoutData);
+            ymaps.layout.storage.add('cluster#myIcon', clusterLayout);
+
+            const placemarkLayoutData = (await import('@/layouts/placemark.js')).default;
+            const placemarkLayout = ymaps.templateLayoutFactory.createClass(placemarkLayoutData);
+            ymaps.layout.storage.add('placemark#myIcon', placemarkLayout);
         },
 
         setIncludingAllBounds({ state, getters }) {
@@ -50,12 +63,27 @@ export default {
         },
 
         createPointsClusterer({ dispatch, rootGetters }) {
-            const clusterer = new ymaps.Clusterer({});
+            const clusterer = new ymaps.Clusterer({
+                clusterIconLayout: 'cluster#myIcon',
+                clusterIconShape : {
+                    type       : 'Circle',
+                    coordinates: [ 16, 16 ],
+                    radius     : 16,
+                },
+                clusterIconOffset: [ -16, -16 ],
+            });
+
             rootGetters['offices/offices'].forEach(off => {
                 const placemark = new ymaps.Placemark(off.coords, {
                     balloonContent: rootGetters['offices/formattedToHTML'](off),
                 }, {
-                    openBalloonOnClick   : true,
+                    iconLayout           : 'placemark#myIcon',
+                    iconShape            : {
+                        type       : 'Circle',
+                        coordinates: [ 12, 12 ],
+                        radius     : 12,
+                    },
+                    iconOffset           : [ -12, -12 ],
                     hideIconOnBalloonOpen: false,
                 });
 
