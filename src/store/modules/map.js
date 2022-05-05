@@ -2,7 +2,7 @@ export default {
     state     : {
         ready           : false,
         map             : undefined,
-        pointsCollection: undefined,
+        pointsClusterer : undefined,
     },
     mutations : {
         ready(state) {
@@ -14,8 +14,8 @@ export default {
             state.map = () => map;
         },
 
-        pointsCollection(state, collection) {
-            state.pointsCollection = collection;
+        pointsClusterer(state, clusterer) {
+            state.pointsClusterer = () => clusterer;
         },
     },
     actions   : {
@@ -45,13 +45,12 @@ export default {
 
         setIncludingAllBounds({ state, getters }) {
             if (state.ready) {
-                ymaps.geoQuery(getters.pointsCollection)
-                     .applyBoundsToMap(getters.map);
+                getters.map.setBounds(getters.pointsClusterer.getBounds());
             }
         },
 
-        createPointsCollection({ dispatch, rootGetters }) {
-            const collection = new ymaps.GeoObjectCollection();
+        createPointsClusterer({ dispatch, rootGetters }) {
+            const clusterer = new ymaps.Clusterer({});
             rootGetters['offices/offices'].forEach(off => {
                 const placemark = new ymaps.Placemark(off.coords, {
                     balloonContent: rootGetters['offices/formattedToHTML'](off),
@@ -64,22 +63,21 @@ export default {
                     dispatch('setCenter', { coords: off.coords });
                 });
 
-                collection.add(placemark);
+                clusterer.add(placemark);
             });
 
-            // Тут тоже надо замыкать, иначе не работает :/
-            return () => collection;
+            return clusterer;
         },
 
         async updateMap({ state, dispatch, commit, getters }) {
             if (!state.ready) return null;
 
-            const pointsCollection = await dispatch('createPointsCollection');
-            commit('pointsCollection', pointsCollection);
+            const pointsClusterer = await dispatch('createPointsClusterer');
+            commit('pointsClusterer', pointsClusterer);
 
             getters.map
                    .geoObjects
-                   .splice(0, 1, getters.pointsCollection);
+                   .splice(0, 1, getters.pointsClusterer);
 
             dispatch('setIncludingAllBounds');
         },
@@ -89,8 +87,8 @@ export default {
         },
     },
     getters   : {
-        pointsCollection(state) {
-            return state.pointsCollection();
+        pointsClusterer(state) {
+            return state.pointsClusterer();
         },
 
         map(state) {
