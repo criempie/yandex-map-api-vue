@@ -29,6 +29,9 @@ export default {
     toggle() {
       this.isOpen = !this.isOpen;
     },
+    calculateMaxHeight() {
+      this.height = this.$refs.cardHolder.scrollHeight;
+    }
   },
   computed  : {
     ...mapGetters([ 'currentCountry' ]),
@@ -42,8 +45,11 @@ export default {
     return { isOpen: false, height: 0 };
   },
   mounted() {
-    this.height = this.$refs.cardHolder.scrollHeight;
+    this.calculateMaxHeight();
   },
+  updated() {
+    this.calculateMaxHeight();
+  }
 };
 </script>
 

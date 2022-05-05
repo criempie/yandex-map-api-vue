@@ -3,24 +3,26 @@
     <Tab v-for="tab of tabs"
          :name="tab.name"
          :alias="tab.alias"
-         :selected="tab.name === selected"/>
+         :selected="tab.name === currentCountry"/>
   </div>
 </template>
 
 <script>
-import Tab from '@/components/Tab';
+import Tab            from '@/components/Tab';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
     Tab,
   },
-  props: {
+  props     : {
     tabs: Array,
   },
+  computed  : {
+    ...mapGetters([ 'currentCountry' ]),
+  },
   data() {
-    return {
-      selected: 'russia',
-    };
+    return { selected: this.currentCountry };
   },
   methods: {
     catchBubbling(event) {
