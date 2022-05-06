@@ -1,24 +1,15 @@
 # studio-flag_testtask
 
-## Project setup
-```
-npm install
-```
+## Используемые технологии
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+- npm 8.1.2
+- node 16.13.1
+- vue 3.2.13
+- vuex 4.0.2
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Запуск проекта
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+1) Установить nodejs https://nodejs.org/en/download/
+2) В папке с проектом ввести консольную команду ```npm install```
+3)  ```npm run serve```
+4) Проект будет доступен по адресу ```http://localhost:8080```
