@@ -40,20 +40,22 @@ export default {
                 commit('map', newMap);
                 commit('ready');
                 dispatch('initCustomLayouts')
+                    .then(() => dispatch('createPointsByOffices'))
                     .then(() => dispatch('updateMap'));
 
             });
         },
 
         async initCustomLayouts() {
-
             const clusterLayoutData = (await import('@/layouts/cluster.js')).default;
             const clusterLayout = ymaps.templateLayoutFactory.createClass(clusterLayoutData);
             ymaps.layout.storage.add('cluster#myIcon', clusterLayout);
 
-            const placemarkLayoutData = (await import('@/layouts/placemark.js')).default;
-            const placemarkLayout = ymaps.templateLayoutFactory.createClass(placemarkLayoutData);
-            ymaps.layout.storage.add('placemark#myIcon', placemarkLayout);
+            const placemarkLayoutData = (await import('@/layouts/placemark.js'));
+            const defaultLayout = ymaps.templateLayoutFactory.createClass(placemarkLayoutData.defaultLayout);
+            const selectedLayout = ymaps.templateLayoutFactory.createClass(placemarkLayoutData.selectedLayout);
+            ymaps.layout.storage.add('placemark#myIcon', defaultLayout);
+            ymaps.layout.storage.add('placemark_selected#myIcon', selectedLayout);
         },
 
         setIncludingAllBounds({ state, getters }) {
@@ -62,17 +64,7 @@ export default {
             }
         },
 
-        createPointsClusterer({ dispatch, rootGetters }) {
-            const clusterer = new ymaps.Clusterer({
-                clusterIconLayout: 'cluster#myIcon',
-                clusterIconShape : {
-                    type       : 'Circle',
-                    coordinates: [ 16, 16 ],
-                    radius     : 16,
-                },
-                clusterIconOffset: [ -16, -16 ],
-            });
-
+        createPointsByOffices({ dispatch, rootGetters }) {
             rootGetters['offices/offices'].forEach(off => {
                 const placemark = new ymaps.Placemark(off.coords, {
                     balloonContent: rootGetters['offices/formattedToHTML'](off),
@@ -91,7 +83,31 @@ export default {
                     dispatch('setCenter', { coords: off.coords });
                 });
 
-                clusterer.add(placemark);
+                placemark.events.add('balloonopen', () => {
+                    placemark.options.set('iconLayout', 'placemark_selected#myIcon');
+                });
+
+                placemark.events.add('balloonclose', () => {
+                    placemark.options.set('iconLayout', 'placemark#myIcon');
+                });
+
+                off.getPlacemark = () => placemark;
+            });
+        },
+
+        createPointsClusterer({ rootGetters }) {
+            const clusterer = new ymaps.Clusterer({
+                clusterIconLayout: 'cluster#myIcon',
+                clusterIconShape : {
+                    type       : 'Circle',
+                    coordinates: [ 16, 16 ],
+                    radius     : 16,
+                },
+                clusterIconOffset: [ -16, -16 ],
+            });
+
+            rootGetters['offices/offices'].forEach(off => {
+                clusterer.add(off.getPlacemark());
             });
 
             return clusterer;

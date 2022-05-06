@@ -18,12 +18,13 @@ export default {
     Map, Side,
   },
   created() {
-    this.initOffices();
-    this.initMap();
+    this.initOffices()
+        .then(() => this.initMap());
   },
   watch   : {
     currentCountry() {
-      this.updateOffices();
+      this.updateOffices()
+          .then(() => this.createPointsForOffices());
     },
   },
   computed: {
@@ -33,10 +34,11 @@ export default {
   },
   methods : {
     ...mapActions({
-      initMap      : 'map/init',
-      initOffices  : 'offices/init',
-      initBalloon  : 'balloon/init',
-      updateOffices: 'offices/updateOffices',
+      initMap               : 'map/init',
+      initOffices           : 'offices/init',
+      initBalloon           : 'balloon/init',
+      updateOffices         : 'offices/updateOffices',
+      createPointsForOffices: 'map/createPointsByOffices',
     }),
   },
 };

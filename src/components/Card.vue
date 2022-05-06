@@ -32,11 +32,12 @@ export default {
     }),
 
     showOnMap() {
-      this.balloonOpen({
-        data  : this.$store.getters['offices/formattedToHTML'](this.office),
+      this.setCenter({
         coords: this.office.coords,
-      })
-          .then(() => this.setCenter({ coords: this.office.coords }));
+      });
+      this.office.getPlacemark()
+          .balloon
+          .open(this.office.coords);
     },
   },
 };

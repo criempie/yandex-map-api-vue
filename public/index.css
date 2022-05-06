@@ -57,6 +57,14 @@
     background-size: 12px 12px !important;
 }
 
+[class*="ymaps-2-1"][class*="-ground-pane"] {
+    filter: grayscale(1);
+    -ms-filter: grayscale(1);
+    -webkit-filter: grayscale(1);
+    -moz-filter: grayscale(1);
+    -o-filter: grayscale(1);
+}
+
 .balloon__header {
     color: var(--primary-color);
     font-weight: 600;
@@ -107,4 +115,11 @@
 .placemark {
     width: 24px;
     height: 24px;
+}
+
+.layout_selected {
+    border: 2px solid white;
+    -webkit-box-shadow: 0 0 32px 10px var(--secondary-color);
+    -moz-box-shadow: 0 0 32px 10px var(--secondary-color);
+    box-shadow: 0 0 32px 10px var(--secondary-color);
 }

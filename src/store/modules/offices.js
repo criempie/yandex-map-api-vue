@@ -1,7 +1,7 @@
 import {
     RUSSIA,
     BELARUS,
-}           from '@/store';
+} from '@/store';
 
 export default {
     state     : {
@@ -55,7 +55,7 @@ export default {
         formattedToHTML: () => (office) => {
             const phoneNumber = (number) => `<span>${number}</span>`;
             let numbers = ``;
-            office.phoneNumbers.forEach(n => numbers += phoneNumber(n))
+            office.phoneNumbers.forEach(n => numbers += phoneNumber(n));
 
             return `
                 <header class="balloon__header">
@@ -66,7 +66,7 @@ export default {
                     <span class="balloon_phoneNumbers">${numbers}</span>    
                     <span class="balloon__email">${office.email}</span>            
                 </main>     
-            `
+            `;
         },
     },
     namespaced: true,
