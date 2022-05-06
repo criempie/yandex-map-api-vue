@@ -26,7 +26,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .icon_opened {
   stroke: #FF9E00 !important;
   transform: rotate(180deg);

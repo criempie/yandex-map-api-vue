@@ -1,4 +1,3 @@
-import balloon from './modules/balloon';
 import Vuex    from 'vuex';
 import map     from './modules/map';
 import offices from './modules/offices';
@@ -16,21 +15,16 @@ export const store = new Vuex.Store({
         },
     },
     actions  : {
-        country({ commit, dispatch }, country) {
+        country({ commit }, country) {
             commit('country', country);
-            dispatch('balloon/close');
         },
     },
     getters  : {
-        coords(state, _, __, rootGetters) {
-            return rootGetters['offices/offices'].map(of => of.coords);
-        },
-
         currentCountry(state) {
             return state.currentCountry;
         },
     },
     modules  : {
-        map, offices, balloon,
+        map, offices,
     },
 });

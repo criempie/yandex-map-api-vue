@@ -17,28 +17,35 @@ export default {
   components: {
     Map, Side,
   },
+
   created() {
-    this.initOffices()
-        .then(() => this.initMap());
+    this.initMap();
   },
-  watch   : {
+
+  watch: {
+    mapIsReady() {
+      this.updateOffices()
+          .then(this.updateMap);
+    },
+
     currentCountry() {
       this.updateOffices()
-          .then(() => this.createPointsForOffices());
+          .then(this.updateMap);
     },
   },
+
   computed: {
     ...mapGetters({
+      mapIsReady    : 'map/ready',
       currentCountry: 'currentCountry',
     }),
   },
-  methods : {
+
+  methods: {
     ...mapActions({
-      initMap               : 'map/init',
-      initOffices           : 'offices/init',
-      initBalloon           : 'balloon/init',
-      updateOffices         : 'offices/updateOffices',
-      createPointsForOffices: 'map/createPointsByOffices',
+      initMap      : 'map/init',
+      updateMap    : 'map/updateMap',
+      updateOffices: 'offices/updateOffices',
     }),
   },
 };
@@ -56,16 +63,5 @@ export default {
   width: 100vw;
   display: flex;
   float: left;
-}
-
-.icon {
-  width: 16px;
-  height: 16px;
-  stroke: black;
-}
-
-.icon_24 {
-  width: 24px;
-  height: 24px;
 }
 </style>

@@ -43,7 +43,7 @@ export default {
   },
   computed  : {
     ...mapGetters({
-      groupedOffices: 'offices/groupByCity',
+      groupedOffices: 'offices/groupedByCity',
     }),
   },
   data() {

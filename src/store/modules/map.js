@@ -24,6 +24,8 @@ export default {
                 const newMap = new ymaps.Map('map', {
                     center: [ 55.76, 37.64 ],
                     zoom  : 7,
+                }, {
+                    minZoom: 2,
                 });
 
                 [ 'fullscreenControl',
@@ -38,11 +40,8 @@ export default {
                     control => newMap.controls.remove(control));
 
                 commit('map', newMap);
+                dispatch('initCustomLayouts');
                 commit('ready');
-                dispatch('initCustomLayouts')
-                    .then(() => dispatch('createPointsByOffices'))
-                    .then(() => dispatch('updateMap'));
-
             });
         },
 
@@ -58,41 +57,39 @@ export default {
             ymaps.layout.storage.add('placemark_selected#myIcon', selectedLayout);
         },
 
+        createPlacemark({ state, dispatch }, { coords, balloonContent }) {
+            const placemark = new ymaps.Placemark(coords, {
+                balloonContent: balloonContent,
+            }, {
+                iconLayout           : 'placemark#myIcon',
+                iconShape            : {
+                    type       : 'Circle',
+                    coordinates: [ 12, 12 ],
+                    radius     : 12,
+                },
+                iconOffset           : [ -12, -12 ],
+                hideIconOnBalloonOpen: false,
+            });
+
+            placemark.events.add('click', () => {
+                dispatch('setCenter', { coords });
+            });
+
+            placemark.events.add('balloonopen', () => {
+                placemark.options.set('iconLayout', 'placemark_selected#myIcon');
+            });
+
+            placemark.events.add('balloonclose', () => {
+                placemark.options.set('iconLayout', 'placemark#myIcon');
+            });
+
+            return () => placemark;
+        },
+
         setIncludingAllBounds({ state, getters }) {
             if (state.ready) {
                 getters.map.setBounds(getters.pointsClusterer.getBounds());
             }
-        },
-
-        createPointsByOffices({ dispatch, rootGetters }) {
-            rootGetters['offices/offices'].forEach(off => {
-                const placemark = new ymaps.Placemark(off.coords, {
-                    balloonContent: rootGetters['offices/formattedToHTML'](off),
-                }, {
-                    iconLayout           : 'placemark#myIcon',
-                    iconShape            : {
-                        type       : 'Circle',
-                        coordinates: [ 12, 12 ],
-                        radius     : 12,
-                    },
-                    iconOffset           : [ -12, -12 ],
-                    hideIconOnBalloonOpen: false,
-                });
-
-                placemark.events.add('click', () => {
-                    dispatch('setCenter', { coords: off.coords });
-                });
-
-                placemark.events.add('balloonopen', () => {
-                    placemark.options.set('iconLayout', 'placemark_selected#myIcon');
-                });
-
-                placemark.events.add('balloonclose', () => {
-                    placemark.options.set('iconLayout', 'placemark#myIcon');
-                });
-
-                off.getPlacemark = () => placemark;
-            });
         },
 
         createPointsClusterer({ rootGetters }) {
@@ -113,6 +110,14 @@ export default {
             return clusterer;
         },
 
+        getClusterByPoint({ getters }, point) {
+            return getters.pointsClusterer.getClusters()
+                          .find(cluster => {
+                              return cluster.getGeoObjects()
+                                            .some(_point => _point === point);
+                          });
+        },
+
         async updateMap({ state, dispatch, commit, getters }) {
             if (!state.ready) return null;
 
@@ -126,11 +131,19 @@ export default {
             dispatch('setIncludingAllBounds');
         },
 
-        setCenter({ getters }, { coords, zoom = 12 }) {
+        setCenter({ getters }, { coords, zoom = 16 }) {
             getters.map.setCenter(coords, zoom);
+        },
+
+        setBounds({ getters }, { bounds, settings }) {
+            return getters.map.setBounds(bounds, settings);
         },
     },
     getters   : {
+        zoom(_, getters) {
+            return getters.map.getZoom();
+        },
+
         pointsClusterer(state) {
             return state.pointsClusterer();
         },

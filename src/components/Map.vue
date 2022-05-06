@@ -17,16 +17,15 @@ export default {
 
   computed: {
     ...mapGetters({
-      coords: 'coords',
+      offices: 'offices/offices',
     }),
   },
 
   watch: {
-    coords() {
+    offices() {
       this.update();
-    }
+    },
   },
-
 };
 </script>
 

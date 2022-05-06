@@ -19,22 +19,32 @@
 <script>
 import {
   mapActions,
+  mapGetters,
 } from 'vuex';
 
 export default {
-  props  : {
+  props: {
     office: Object,
   },
+
+  computed: {
+    ...mapGetters({
+      mapZoom: 'map/zoom',
+    }),
+  },
+
   methods: {
     ...mapActions({
-      balloonOpen: 'balloon/open',
-      setCenter  : 'map/setCenter',
+      setCenter        : 'map/setCenter',
+      setBounds        : 'map/setBounds',
+      getClusterByPoint: 'map/getClusterByPoint',
     }),
 
-    showOnMap() {
+    async showOnMap() {
       this.setCenter({
         coords: this.office.coords,
       });
+
       this.office.getPlacemark()
           .balloon
           .open(this.office.coords);

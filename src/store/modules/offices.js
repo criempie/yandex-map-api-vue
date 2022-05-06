@@ -14,18 +14,30 @@ export default {
     },
     actions   : {
         init({ dispatch }) {
-            dispatch('updateOffices');
+            return dispatch('updateOffices');
         },
 
-        updateOffices({ commit, rootState }) {
+        async updateOffices({ commit, rootState, dispatch }) {
+            let offices = [];
             if (rootState.currentCountry === RUSSIA) {
-                import('@/russiaOffices.json')
-                    .then(_offices => commit('offices', Array.from(_offices)));
+                offices = Array.from(await import('@/russiaOffices.json'));
 
             } else if (rootState.currentCountry === BELARUS) {
-                import('@/belarusOffices.json')
-                    .then(_offices => commit('offices', Array.from(_offices)));
+                offices = Array.from(await import('@/belarusOffices.json'));
             }
+
+            await dispatch('addPlacemarksToOffices', offices);
+            commit('offices', offices);
+        },
+
+        addPlacemarksToOffices({ state, dispatch, getters }, offices) {
+            offices.forEach(async office => {
+                office.getPlacemark = await dispatch('map/createPlacemark', {
+                        coords        : office.coords,
+                        balloonContent: getters.formattedToHTML(office),
+                    },
+                    { root: true });
+            });
         },
     },
     getters   : {
@@ -33,7 +45,7 @@ export default {
             return state.offices;
         },
 
-        groupByCity(state) {
+        groupedByCity(state) {
             const grouped = {};
             const result = [];
 
@@ -45,8 +57,8 @@ export default {
                 }
             });
 
-            for (let k in grouped) {
-                result.push({ city: k, offices: grouped[k] });
+            for (let key in grouped) {
+                result.push({ city: key, offices: grouped[key] });
             }
 
             return result;

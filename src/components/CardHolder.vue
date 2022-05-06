@@ -19,37 +19,45 @@ import Card           from '@/components/Card';
 import { mapGetters } from 'vuex';
 
 export default {
-  props     : {
+  props: {
     officesByCity: Object,
   },
+
   components: {
     Card, ArrowIcon,
   },
-  methods   : {
+
+  methods: {
     toggle() {
       this.isOpen = !this.isOpen;
     },
+
     calculateMaxHeight() {
       this.height = this.$refs.cardHolder.scrollHeight;
-    }
+    },
   },
-  computed  : {
+
+  computed: {
     ...mapGetters([ 'currentCountry' ]),
   },
-  watch     : {
+
+  watch: {
     currentCountry() {
       this.isOpen = false;
     },
   },
+
   data() {
     return { isOpen: false, height: 0 };
   },
+
   mounted() {
     this.calculateMaxHeight();
   },
+
   updated() {
     this.calculateMaxHeight();
-  }
+  },
 };
 </script>
 

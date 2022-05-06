@@ -44,6 +44,17 @@
     cursor: pointer;
 }
 
+.icon {
+    width: 16px;
+    height: 16px;
+    stroke: black;
+}
+
+.icon_24 {
+    width: 24px;
+    height: 24px;
+}
+
 /*ymaps*/
 
 .ymaps-2-1-79-balloon__layout,
