@@ -63,5 +63,6 @@ export default {
   width: 100vw;
   display: flex;
   float: left;
+  overflow: hidden;
 }
 </style>

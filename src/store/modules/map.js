@@ -94,6 +94,7 @@ export default {
 
         createPointsClusterer({ rootGetters }) {
             const clusterer = new ymaps.Clusterer({
+                gridSize: 256,
                 clusterIconLayout: 'cluster#myIcon',
                 clusterIconShape : {
                     type       : 'Circle',
@@ -108,14 +109,6 @@ export default {
             });
 
             return clusterer;
-        },
-
-        getClusterByPoint({ getters }, point) {
-            return getters.pointsClusterer.getClusters()
-                          .find(cluster => {
-                              return cluster.getGeoObjects()
-                                            .some(_point => _point === point);
-                          });
         },
 
         async updateMap({ state, dispatch, commit, getters }) {
@@ -133,10 +126,6 @@ export default {
 
         setCenter({ getters }, { coords, zoom = 16 }) {
             getters.map.setCenter(coords, zoom);
-        },
-
-        setBounds({ getters }, { bounds, settings }) {
-            return getters.map.setBounds(bounds, settings);
         },
     },
     getters   : {

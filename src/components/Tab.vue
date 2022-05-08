@@ -21,8 +21,8 @@ export default {
 .tab {
   padding: .5em 1em;
   outline: none;
-  border: 1px solid #A4A4A4;
-  color: #A4A4A4;
+  border: 1px solid var(--tertiary-color);
+  color: var(--tertiary-color);
   background-color: white;
   width: 100%;
 }

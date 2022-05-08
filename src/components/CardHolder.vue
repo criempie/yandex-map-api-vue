@@ -65,9 +65,7 @@ export default {
 .card-holder {
   padding: .5em 1em;
 
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(34, 60, 80, 0.2);
-  -moz-box-shadow: 0px 0px 10px 0px rgba(34, 60, 80, 0.2);
-  box-shadow: 0px 0px 10px 0px rgba(34, 60, 80, 0.2);
+  border-bottom: 1px solid var(--tertiary-color);
 }
 
 .body {

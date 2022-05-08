@@ -36,8 +36,7 @@ export default {
   methods: {
     ...mapActions({
       setCenter        : 'map/setCenter',
-      setBounds        : 'map/setBounds',
-      getClusterByPoint: 'map/getClusterByPoint',
+      setBounds        : 'map/setBounds'
     }),
 
     async showOnMap() {
